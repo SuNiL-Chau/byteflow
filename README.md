@@ -1,6 +1,8 @@
-# Better Streams
+# Streamflow
 
 A cross-runtime JavaScript streaming library designed to replace or augment the Web Streams and Node.js Streams APIs with strictly async-iterable-first semantics.
+
+Source of idiation - [Cloudflare Blog Better Stream API](https://blog.cloudflare.com/a-better-web-streams-api/)
 
 ## Motivation
 Web Streams (`ReadableStream`, `WritableStream`) are heavy, microtask-intensive, and inherently promise-bound per chunk. Node.js Streams (`stream.Readable`) are bound to the Node ecosystem and can carry heavy legacy baggage and performance costs.
