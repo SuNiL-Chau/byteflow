@@ -3,6 +3,5 @@ streamflow-prd.md
 streamflow-prd-enterprise.md
 WINTERCG_STREAMFLOW_RFC.md
 node_modules
-dist
 *.log
 *.txt
