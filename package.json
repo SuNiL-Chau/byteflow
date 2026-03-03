@@ -17,9 +17,7 @@
       }
     }
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "scripts": {
     "build": "node node_modules/tsup/dist/cli-default.js",
     "dev": "node node_modules/tsup/dist/cli-default.js --watch",
@@ -27,12 +25,7 @@
     "lint": "node node_modules/@biomejs/biome/bin/biome check .",
     "format": "node node_modules/@biomejs/biome/bin/biome format --write ."
   },
-  "keywords": [
-    "streams",
-    "async-iterable",
-    "streaming",
-    "performance"
-  ],
+  "keywords": ["streams", "async-iterable", "streaming", "performance"],
   "author": "",
   "license": "MIT",
   "devDependencies": {

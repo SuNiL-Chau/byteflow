@@ -6,6 +6,7 @@ export { text, bytes, json } from './core/helpers.js';
 export * from './errors.js';
 export { fromWeb, toWeb } from './adapters/web.js';
 export { fromNode, toNode } from './adapters/node.js';
+export { use, type StreamPlugin, type StreamContext } from './core/plugin.js';
 
 /*
   Namespace Export Strategy:

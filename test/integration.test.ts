@@ -1,36 +1,33 @@
-import { describe, it } from 'node:test';
 import * as assert from 'node:assert';
-import { push, share, pull, text } from '../dist/index.esm.js';
+import { describe, it } from 'node:test';
+import { pull, push, share, text } from '../dist/index.esm.js';
 
 describe('Integration Tests', () => {
-    it('Stream.share multi-consumer pipeline', async () => {
-        // Producer pipeline
-        const { writer, readable } = push({ highWaterMark: 100 });
+  it('Stream.share multi-consumer pipeline', async () => {
+    // Producer pipeline
+    const { writer, readable } = push({ highWaterMark: 100 });
 
-        // Create shared stream
-        const shared = share(readable);
+    // Create shared stream
+    const shared = share(readable);
 
-        // Consumer A (raw text)
-        const consumerA = shared.pull();
+    // Consumer A (raw text)
+    const consumerA = shared.pull();
 
-        // Consumer B (uppercase transform)
-        const consumerB = shared.pull((chunk: Uint8Array) => {
-            const str = new TextDecoder().decode(chunk);
-            return [new TextEncoder().encode(str.toUpperCase())];
-        });
-
-        writer.write('hello');
-        writer.write(' ');
-        writer.write('world');
-        writer.end();
-
-        // Await both pipelines
-        const [resultA, resultB] = await Promise.all([
-            text(consumerA),
-            text(consumerB)
-        ]);
-
-        assert.strictEqual(resultA, 'hello world');
-        assert.strictEqual(resultB, 'HELLO WORLD');
+    // Consumer B (uppercase transform)
+    const consumerB = shared.pull((chunk: Uint8Array) => {
+      const str = new TextDecoder().decode(chunk);
+      return [new TextEncoder().encode(str.toUpperCase())];
     });
+
+    writer.write('hello');
+    writer.write(' ');
+    writer.write('world');
+    writer.end();
+
+    // Await both pipelines
+    const [resultA, resultB] = await Promise.all([text(consumerA), text(consumerB)]);
+
+    assert.strictEqual(resultA, 'hello world');
+    assert.strictEqual(resultB, 'HELLO WORLD');
+  });
 });
