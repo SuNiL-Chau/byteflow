@@ -5,3 +5,4 @@ WINTERCG_STREAMFLOW_RFC.md
 node_modules
 *.log
 *.txt
+*.tgz
