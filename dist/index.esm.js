@@ -150,7 +150,7 @@ var PushStreamController = class {
           const waiter = this.pullQueue.dequeue();
           waiter?.resolve({ value: void 0, done: true });
         }
-      } else if (this.abortReason !== null) {
+      } else if (this.abortReason) {
         while (this.pullQueue.length > 0) {
           const waiter = this.pullQueue.dequeue();
           waiter?.reject(this.toError(this.abortReason));
@@ -224,7 +224,7 @@ var PushStreamController = class {
             this.resolveBlockedWriters();
           } else if (this.isEnded) {
             resolve({ value: void 0, done: true });
-          } else if (this.abortReason !== null) {
+          } else if (this.abortReason) {
             reject(this.toError(this.abortReason));
           } else {
             this.pullQueue.enqueue({ resolve, reject });
@@ -382,7 +382,7 @@ async function* fromNode(stream) {
     } else if (typeof chunk === "string") {
       yield [new TextEncoder().encode(chunk)];
     } else {
-      throw new Error(`Unsupported chunk type in fromNode: ${typeof chunk}`);
+      throw new TypeError(`Unsupported chunk type in fromNode: ${typeof chunk}`);
     }
   }
 }
