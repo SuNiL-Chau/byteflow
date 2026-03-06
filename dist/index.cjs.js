@@ -137,6 +137,9 @@ var PushStreamController = class {
   encodeString(str) {
     return new TextEncoder().encode(str);
   }
+  toError(reason) {
+    return reason instanceof Error ? reason : new StreamAbortError(String(reason));
+  }
   processWaiters() {
     if (this.pullQueue.length > 0) {
       if (this.buffer.length > 0) {
@@ -152,7 +155,7 @@ var PushStreamController = class {
       } else if (this.abortReason !== null) {
         while (this.pullQueue.length > 0) {
           const waiter = this.pullQueue.dequeue();
-          waiter?.reject(this.abortReason);
+          waiter?.reject(this.toError(this.abortReason));
         }
       }
     }
@@ -224,7 +227,7 @@ var PushStreamController = class {
           } else if (this.isEnded) {
             resolve({ value: void 0, done: true });
           } else if (this.abortReason !== null) {
-            reject(this.abortReason);
+            reject(this.toError(this.abortReason));
           } else {
             this.pullQueue.enqueue({ resolve, reject });
           }
@@ -288,7 +291,7 @@ function share(source, options) {
         if (consumers.length === 0) {
           continue;
         }
-        await Promise.all(consumers.map((c) => c.writer.writev(batch)));
+        await Promise.all(consumers.map((c) => Promise.resolve(c.writer.writev(batch))));
       }
       for (const consumer of consumers) {
         consumer.writer.end();
